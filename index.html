@@ -13,7 +13,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 200vh;
+            height: 100vh;
         }
         .container {
             background: white;
@@ -57,20 +57,6 @@
         button:hover {
             background-color: #4cae4c;
         }
-        .result {
-            margin-top: 20px;
-        }
-        .result ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        .result li {
-            background: #e7f4e7;
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 4px;
-        }
-
         .error {
             color: red;
             text-align: center;
@@ -111,8 +97,7 @@
                 <label for="priestCount">Priest:</label>
                 <input type="number" id="priestCount" min="0">
             </div>
-            <button onclick="assignRoles()">Assign Roles </button>
-            <button onclick="assignRoles()">Shuffle Roles </button>
+            <button onclick="submitRoles()">Submit Roles</button>
         </div>
         
         <div id="result" class="result"></div>
@@ -145,7 +130,7 @@
             }
         }
 
-        function assignRoles() {
+        function submitRoles() {
             const numPlayers = document.getElementById('numPlayers').value;
             const players = [];
 
@@ -173,42 +158,10 @@
                 return;
             }
 
-            const roles = [];
-            for (const [role, count] of Object.entries(rolesDistribution)) {
-                for (let i = 0; i < count; i++) {
-                    roles.push(role);
-                }
-            }
+            localStorage.setItem('players', JSON.stringify(players));
+            localStorage.setItem('rolesDistribution', JSON.stringify(rolesDistribution));
 
-            shuffleArray(roles);
-
-            const assignedRoles = {};
-            players.forEach((player, index) => {
-                assignedRoles[player] = roles[index];
-            });
-
-            displayAssignedRoles(assignedRoles);
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        function displayAssignedRoles(assignedRoles) {
-            const resultDiv = document.getElementById('result');
-            resultDiv.innerHTML = '<h2>Assigned Roles:</h2>';
-            const ul = document.createElement('ul');
-
-            for (const [player, role] of Object.entries(assignedRoles)) {
-                const li = document.createElement('li');
-                li.textContent = `${player} :-  ${role}`;
-                ul.appendChild(li);
-            }
-
-            resultDiv.appendChild(ul);
+            window.location.href = 'roles.html';
         }
     </script>
 </body>
